@@ -56,7 +56,37 @@ module.exports = {
         res.json(json);
     },
 
-    
+    alterar: async(req, res) => {
+        let json = {error:'', result:{}};
+
+        console.log("REQ:", req.body)
+        let codigo = req.params.codigo;
+        let modelo = req.body.modelo;
+        let placa = req.body.placa;
+        
+        if(codigo && modelo && placa) {
+                await CarroService.alterar(codigo, modelo, placa);
+            json.result = {
+                codigo,
+                modelo,
+                placa
+            };
+                
+        } else {
+                json.error = 'campos não enviados!';
+        }
+
+        res.json(json);
+    },
+
+    excluir: async(req, res) => {
+        let json = {error:'', result:{}};
+
+        await CarroService.excluir(req.params.codigo);
+
+        res.json(json);
+
+    }
 
     
 
