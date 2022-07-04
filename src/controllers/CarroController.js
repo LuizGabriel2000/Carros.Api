@@ -11,7 +11,9 @@ module.exports = {
             json.result.push({
                 codigo: carros[i].codigo,
                 descricao: carros[i].modelo,
-                placa: carros[i].placa
+                placa: carros[i].placa,
+                marca: carros[i].marca,
+                cor: carros[i].cor
             });
                 
         }
@@ -40,13 +42,17 @@ module.exports = {
 
         let modelo = req.body.modelo;
         let placa = req.body.placa;
+        let marca = req.body.marca;
+        let cor = req.body.cor;
         
         if(modelo && placa) {
             let carroCodigo = await CarroService.inserir(modelo, placa);
             json.result = {
                 codigo: carroCodigo,
                 modelo,
-                placa
+                placa,
+                marca,
+                cor
             };
                 
         } else {
@@ -63,19 +69,27 @@ module.exports = {
         let codigo = req.params.codigo;
         let modelo = req.body.modelo;
         let placa = req.body.placa;
-        
-        if(codigo && modelo && placa) {
-                await CarroService.alterar(codigo, modelo, placa);
-            json.result = {
-                codigo,
-                modelo,
-                placa
-            };
-                
-        } else {
-                json.error = 'campos não enviados!';
-        }
+        let marca = req.body.marca;
+        let cor = req.body.cor;
 
+        if (marca.length > 20) {
+            json.error = "Campo contem mais de 20 caracteris"
+        } else {
+            if(codigo && modelo && placa) {
+                await CarroService.alterar(codigo, marca, modelo, cor, placa);
+                json.result = {
+                    codigo,
+                    modelo,
+                    placa,
+                    marca,
+                    cor
+                };
+                    
+            } else {
+                    json.error = 'campos não enviados!';
+            }
+        }
+        
         res.json(json);
     },
 

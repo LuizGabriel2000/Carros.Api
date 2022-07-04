@@ -31,23 +31,18 @@ module.exports = {
 
     inserir: (modelo, placa) => {
         return new Promise((aceito, rejeitado) => {
-            db.query('select * from carros', (err, res) => {
+            let count = (Math.random() * 1000)
 
-                let count = (res.recordset.length + 1)
+            db.query(`INSERT INTO carros (codigo, modelo, Placa) VALUES (${count}, '${modelo}', '${placa}')`, (error, results) => {
+                
+                if(error) { rejeitado(error); return; }
 
-
-                db.query(`INSERT INTO carros (codigo, modelo, Placa) VALUES (${count}, '${modelo}', '${placa}')`, (error, results) => {
-                    
-                    if(error) { rejeitado(error); return; }
-    
-                    aceito(results.inserirCodigo);
-                })
-            }) 
-            
+                aceito(results.inserirCodigo);
+            })
         })
     },
 
-    alterar: (codigo, modelo, placa) => {
+    alterar: (codigo, marca, modelo, cor, placa) => {
         return new Promise((aceito, rejeitado) => {
             db.query('select * from carros', (err, res) => {
 
@@ -56,7 +51,7 @@ module.exports = {
 
                 console.log("result count", count)
 
-                db.query(`update carros set modelo = '${modelo}', placa = '${placa}' where codigo = ${codigo}`, (error, results) => {
+                db.query(`update carros set modelo = '${modelo}', placa = '${placa}', marca = '${marca}', cor = '${cor}' where codigo = ${codigo}`, (error, results) => {
                  
                     if(error) { rejeitado(error); return; }
     
